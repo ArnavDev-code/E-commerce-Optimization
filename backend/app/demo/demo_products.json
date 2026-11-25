@@ -1,0 +1,558 @@
+[
+  {
+    "title": "Vitamin C Brightening Serum (30ml)",
+    "handle": "vitamin-c-brightening-serum",
+    "product_type": "Skincare",
+    "vendor": "Lumina Botanicals",
+    "price": 48.00,
+    "compare_at_price": 58.00,
+    "unit_cost": 12.50,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80",
+    "problem_flag": "low_atc_rate",
+    "description": "High traffic from social ads (4,200 views/mo), but very low Add-To-Cart rate (1.2% vs 4.8% store baseline). Mobile traffic share 74%.",
+    "variants": [
+      {
+        "sku": "LUM-VITC-30",
+        "title": "30ml Standard Bottle",
+        "price": 48.00,
+        "unit_cost": 12.50,
+        "inventory_quantity": 420
+      }
+    ]
+  },
+  {
+    "title": "Retinol Recovery Night Cream",
+    "handle": "retinol-recovery-night-cream",
+    "product_type": "Skincare",
+    "vendor": "Lumina Botanicals",
+    "price": 54.00,
+    "compare_at_price": null,
+    "unit_cost": 15.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&q=80",
+    "problem_flag": "atc_rate_decline",
+    "description": "Historical star performer whose ATC rate suddenly plummeted from 5.4% to 2.1% in the last 30 days following an unannounced price change and formula redesign.",
+    "variants": [
+      {
+        "sku": "LUM-RET-50",
+        "title": "50ml Jar",
+        "price": 54.00,
+        "unit_cost": 15.00,
+        "inventory_quantity": 280
+      }
+    ]
+  },
+  {
+    "title": "Hyaluronic Acid Intense Moisturizer",
+    "handle": "hyaluronic-acid-intense-moisturizer",
+    "product_type": "Skincare",
+    "vendor": "Lumina Botanicals",
+    "price": 42.00,
+    "compare_at_price": 46.00,
+    "unit_cost": 11.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1608248597359-002d287ee3b4?w=500&q=80",
+    "problem_flag": "high_atc_low_checkout",
+    "description": "Outstanding Add-To-Cart rate (6.5%), but catastrophic cart-to-checkout dropoff (only 14% reach checkout start due to unexpected domestic shipping fees).",
+    "variants": [
+      {
+        "sku": "LUM-HYA-50",
+        "title": "50ml Pump",
+        "price": 42.00,
+        "unit_cost": 11.00,
+        "inventory_quantity": 310
+      }
+    ]
+  },
+  {
+    "title": "Organic Rosehip Face Oil",
+    "handle": "organic-rosehip-face-oil",
+    "product_type": "Skincare",
+    "vendor": "Pure Botanics",
+    "price": 36.00,
+    "compare_at_price": null,
+    "unit_cost": 9.20,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=500&q=80",
+    "problem_flag": "low_purchase_completion",
+    "description": "High checkout initiation rate, but 78% drop off during final payment step on mobile due to missing regional payment gateways (Shop Pay/Klarna).",
+    "variants": [
+      {
+        "sku": "PUR-ROSE-30",
+        "title": "30ml Dropper",
+        "price": 36.00,
+        "unit_cost": 9.20,
+        "inventory_quantity": 195
+      }
+    ]
+  },
+  {
+    "title": "Cashmere Blend Oversized Knit Sweater",
+    "handle": "cashmere-blend-oversized-knit-sweater",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 189.00,
+    "compare_at_price": 220.00,
+    "unit_cost": 65.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&q=80",
+    "problem_flag": "overstocked_underperformer",
+    "description": "High capital commitment ($32k tied up), 540 units in warehouse with >120 days of forward supply, but sluggish conversion (0.8%).",
+    "variants": [
+      {
+        "sku": "AUR-SWT-S",
+        "title": "Small / Oat",
+        "price": 189.00,
+        "unit_cost": 65.00,
+        "inventory_quantity": 180
+      },
+      {
+        "sku": "AUR-SWT-M",
+        "title": "Medium / Oat",
+        "price": 189.00,
+        "unit_cost": 65.00,
+        "inventory_quantity": 220
+      },
+      {
+        "sku": "AUR-SWT-L",
+        "title": "Large / Oat",
+        "price": 189.00,
+        "unit_cost": 65.00,
+        "inventory_quantity": 140
+      }
+    ]
+  },
+  {
+    "title": "Mulberry Silk Sleep Set (Pillowcase & Mask)",
+    "handle": "mulberry-silk-sleep-set",
+    "product_type": "Wellness",
+    "vendor": "Serene Living",
+    "price": 79.00,
+    "compare_at_price": 89.00,
+    "unit_cost": 24.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&q=80",
+    "problem_flag": "stockout_risk",
+    "description": "High conversion hero item (5.8% conversion rate) with only 9 units remaining in stock, projected stockout in 4 days while paid ad spend is still active.",
+    "variants": [
+      {
+        "sku": "SER-SILK-CHAMP",
+        "title": "Champagne / Standard",
+        "price": 79.00,
+        "unit_cost": 24.00,
+        "inventory_quantity": 9
+      }
+    ]
+  },
+  {
+    "title": "Hydrolyzed Marine Collagen Peptides",
+    "handle": "hydrolyzed-marine-collagen-peptides",
+    "product_type": "Wellness",
+    "vendor": "Vigor Labs",
+    "price": 52.00,
+    "compare_at_price": null,
+    "unit_cost": 21.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1577401239170-897942555fb3?w=500&q=80",
+    "problem_flag": "low_rpv_high_traffic",
+    "description": "Receives 35% of total paid traffic, but Revenue Per Visitor is $0.48 vs store average $2.10 due to vague efficacy claims and lack of visible customer reviews.",
+    "variants": [
+      {
+        "sku": "VIG-COL-300G",
+        "title": "300g Powder Tub",
+        "price": 52.00,
+        "unit_cost": 21.00,
+        "inventory_quantity": 250
+      }
+    ]
+  },
+  {
+    "title": "Bamboo Fiber High-Waist Yoga Leggings",
+    "handle": "bamboo-fiber-high-waist-yoga-leggings",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 68.00,
+    "compare_at_price": 78.00,
+    "unit_cost": 18.50,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=500&q=80",
+    "problem_flag": "mobile_leak",
+    "description": "Desktop conversion is healthy at 4.2%, but mobile ATC rate collapses to 0.9% because the size selector dropdown is obscured by a sticky footer bar.",
+    "variants": [
+      {
+        "sku": "AUR-YOG-S",
+        "title": "Small / Forest Green",
+        "price": 68.00,
+        "unit_cost": 18.50,
+        "inventory_quantity": 110
+      },
+      {
+        "sku": "AUR-YOG-M",
+        "title": "Medium / Forest Green",
+        "price": 68.00,
+        "unit_cost": 18.50,
+        "inventory_quantity": 140
+      }
+    ]
+  },
+  {
+    "title": "Niacinamide Pore Refining Essence",
+    "handle": "niacinamide-pore-refining-essence",
+    "product_type": "Skincare",
+    "vendor": "Lumina Botanicals",
+    "price": 34.00,
+    "compare_at_price": null,
+    "unit_cost": 8.50,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=500&q=80",
+    "problem_flag": null,
+    "description": "Steady performer with 4.9% ATC rate, 65% checkout progression, and 70% purchase rate.",
+    "variants": [
+      {
+        "sku": "LUM-NIA-50",
+        "title": "50ml",
+        "price": 34.00,
+        "unit_cost": 8.50,
+        "inventory_quantity": 380
+      }
+    ]
+  },
+  {
+    "title": "Gentle Ceramide Cleansing Foam",
+    "handle": "gentle-ceramide-cleansing-foam",
+    "product_type": "Skincare",
+    "vendor": "Lumina Botanicals",
+    "price": 28.00,
+    "compare_at_price": null,
+    "unit_cost": 6.80,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&q=80",
+    "problem_flag": null,
+    "description": "High repurchase rate, healthy 5.1% conversion.",
+    "variants": [
+      {
+        "sku": "LUM-CER-150",
+        "title": "150ml Bottle",
+        "price": 28.00,
+        "unit_cost": 6.80,
+        "inventory_quantity": 410
+      }
+    ]
+  },
+  {
+    "title": "Bakuchiol Natural Age-Defying Cream",
+    "handle": "bakuchiol-natural-age-defying-cream",
+    "product_type": "Skincare",
+    "vendor": "Pure Botanics",
+    "price": 49.00,
+    "compare_at_price": 55.00,
+    "unit_cost": 13.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=500&q=80",
+    "problem_flag": null,
+    "description": "Solid organic conversion with 4.6% ATC rate.",
+    "variants": [
+      {
+        "sku": "PUR-BAK-50",
+        "title": "50ml Jar",
+        "price": 49.00,
+        "unit_cost": 13.00,
+        "inventory_quantity": 230
+      }
+    ]
+  },
+  {
+    "title": "Centella Soothing Barrier Gel",
+    "handle": "centella-soothing-barrier-gel",
+    "product_type": "Skincare",
+    "vendor": "Pure Botanics",
+    "price": 32.00,
+    "compare_at_price": null,
+    "unit_cost": 7.90,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1567928815104-b69807581786?w=500&q=80",
+    "problem_flag": null,
+    "description": "Consistent seasonal sales with 4.4% ATC rate.",
+    "variants": [
+      {
+        "sku": "PUR-CEN-75",
+        "title": "75ml Tube",
+        "price": 32.00,
+        "unit_cost": 7.90,
+        "inventory_quantity": 300
+      }
+    ]
+  },
+  {
+    "title": "Relaxed French Linen Button-Down Shirt",
+    "handle": "relaxed-french-linen-button-down-shirt",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 95.00,
+    "compare_at_price": 110.00,
+    "unit_cost": 31.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80",
+    "problem_flag": null,
+    "description": "Core summer hero product, balanced 4.1% ATC and 62% checkout rate.",
+    "variants": [
+      {
+        "sku": "AUR-LIN-M",
+        "title": "Medium / Ivory",
+        "price": 95.00,
+        "unit_cost": 31.00,
+        "inventory_quantity": 180
+      },
+      {
+        "sku": "AUR-LIN-L",
+        "title": "Large / Ivory",
+        "price": 95.00,
+        "unit_cost": 31.00,
+        "inventory_quantity": 160
+      }
+    ]
+  },
+  {
+    "title": "Structured Merino Wool Coat",
+    "handle": "structured-merino-wool-coat",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 240.00,
+    "compare_at_price": null,
+    "unit_cost": 88.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1539533018447-63fcce667823?w=500&q=80",
+    "problem_flag": null,
+    "description": "High AOV driver, healthy 2.9% overall conversion for luxury tier.",
+    "variants": [
+      {
+        "sku": "AUR-COAT-M",
+        "title": "Medium / Camel",
+        "price": 240.00,
+        "unit_cost": 88.00,
+        "inventory_quantity": 85
+      }
+    ]
+  },
+  {
+    "title": "Tailored Organic Cotton Trousers",
+    "handle": "tailored-organic-cotton-trousers",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 82.00,
+    "compare_at_price": null,
+    "unit_cost": 26.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&q=80",
+    "problem_flag": null,
+    "description": "Consistent reorders, stable 3.9% ATC rate.",
+    "variants": [
+      {
+        "sku": "AUR-TRS-32",
+        "title": "32 / Charcoal",
+        "price": 82.00,
+        "unit_cost": 26.00,
+        "inventory_quantity": 210
+      }
+    ]
+  },
+  {
+    "title": "Everyday Pima Cotton T-Shirt",
+    "handle": "everyday-pima-cotton-t-shirt",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 38.00,
+    "compare_at_price": 45.00,
+    "unit_cost": 9.50,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&q=80",
+    "problem_flag": null,
+    "description": "High volume basket builder with 6.2% ATC rate.",
+    "variants": [
+      {
+        "sku": "AUR-TEE-WHT-M",
+        "title": "Medium / White",
+        "price": 38.00,
+        "unit_cost": 9.50,
+        "inventory_quantity": 450
+      }
+    ]
+  },
+  {
+    "title": "Ribbed Modal Lounge Set",
+    "handle": "ribbed-modal-lounge-set",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 115.00,
+    "compare_at_price": null,
+    "unit_cost": 36.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80",
+    "problem_flag": null,
+    "description": "Strong social media conversion (4.5% overall).",
+    "variants": [
+      {
+        "sku": "AUR-LNG-M",
+        "title": "Medium / Sage",
+        "price": 115.00,
+        "unit_cost": 36.00,
+        "inventory_quantity": 175
+      }
+    ]
+  },
+  {
+    "title": "Organic Ashwagandha & Rhodiola Capsules",
+    "handle": "organic-ashwagandha-rhodiola-capsules",
+    "product_type": "Wellness",
+    "vendor": "Vigor Labs",
+    "price": 34.00,
+    "compare_at_price": 39.00,
+    "unit_cost": 8.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&q=80",
+    "problem_flag": null,
+    "description": "High subscription conversion rate, 5.0% ATC.",
+    "variants": [
+      {
+        "sku": "VIG-ASH-60",
+        "title": "60 Veggie Capsules",
+        "price": 34.00,
+        "unit_cost": 8.00,
+        "inventory_quantity": 520
+      }
+    ]
+  },
+  {
+    "title": "Magnesium Glycinate Sleep Complex",
+    "handle": "magnesium-glycinate-sleep-complex",
+    "product_type": "Wellness",
+    "vendor": "Vigor Labs",
+    "price": 38.00,
+    "compare_at_price": null,
+    "unit_cost": 9.50,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1550572017-edb79984244a?w=500&q=80",
+    "problem_flag": null,
+    "description": "Popular bedtime supplement with strong 4.7% ATC rate.",
+    "variants": [
+      {
+        "sku": "VIG-MAG-90",
+        "title": "90 Capsules",
+        "price": 38.00,
+        "unit_cost": 9.50,
+        "inventory_quantity": 380
+      }
+    ]
+  },
+  {
+    "title": "Ceramic Ultrasonic Aroma Diffuser",
+    "handle": "ceramic-ultrasonic-aroma-diffuser",
+    "product_type": "Wellness",
+    "vendor": "Serene Living",
+    "price": 65.00,
+    "compare_at_price": 75.00,
+    "unit_cost": 22.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&q=80",
+    "problem_flag": null,
+    "description": "Aesthetic home wellness piece, 3.8% ATC rate.",
+    "variants": [
+      {
+        "sku": "SER-DIF-WHT",
+        "title": "Matte White",
+        "price": 65.00,
+        "unit_cost": 22.00,
+        "inventory_quantity": 160
+      }
+    ]
+  },
+  {
+    "title": "Lavender & Bergamot Essential Oil Blend",
+    "handle": "lavender-bergamot-essential-oil-blend",
+    "product_type": "Wellness",
+    "vendor": "Serene Living",
+    "price": 22.00,
+    "compare_at_price": null,
+    "unit_cost": 4.50,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1608571424266-edeb9bbefdec?w=500&q=80",
+    "problem_flag": null,
+    "description": "Frequent bundle add-on, 7.1% ATC rate.",
+    "variants": [
+      {
+        "sku": "SER-OIL-15",
+        "title": "15ml Dropper",
+        "price": 22.00,
+        "unit_cost": 4.50,
+        "inventory_quantity": 600
+      }
+    ]
+  },
+  {
+    "title": "Weighted Bamboo Relaxation Blanket (15 lbs)",
+    "handle": "weighted-bamboo-relaxation-blanket",
+    "product_type": "Wellness",
+    "vendor": "Serene Living",
+    "price": 145.00,
+    "compare_at_price": 165.00,
+    "unit_cost": 52.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1540518614846-7ede433c4ef8?w=500&q=80",
+    "problem_flag": null,
+    "description": "High ticket wellness gift item with 3.2% conversion.",
+    "variants": [
+      {
+        "sku": "SER-WBL-15",
+        "title": "15 lbs / Slate Grey",
+        "price": 145.00,
+        "unit_cost": 52.00,
+        "inventory_quantity": 90
+      }
+    ]
+  },
+  {
+    "title": "Matcha Ceremonial Grade Green Tea Powder",
+    "handle": "matcha-ceremonial-grade-green-tea-powder",
+    "product_type": "Wellness",
+    "vendor": "Vigor Labs",
+    "price": 44.00,
+    "compare_at_price": null,
+    "unit_cost": 14.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80",
+    "problem_flag": null,
+    "description": "High repeat purchase and subscription rate, 5.5% ATC.",
+    "variants": [
+      {
+        "sku": "VIG-MAT-100",
+        "title": "100g Tin",
+        "price": 44.00,
+        "unit_cost": 14.00,
+        "inventory_quantity": 340
+      }
+    ]
+  },
+  {
+    "title": "Handcrafted Leather Everyday Tote",
+    "handle": "handcrafted-leather-everyday-tote",
+    "product_type": "Fashion",
+    "vendor": "Aura Atelier",
+    "price": 165.00,
+    "compare_at_price": 195.00,
+    "unit_cost": 54.00,
+    "cost_source": "manual",
+    "image_url": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&q=80",
+    "problem_flag": null,
+    "description": "Evergreen accessory, 3.6% ATC and high gross margin.",
+    "variants": [
+      {
+        "sku": "AUR-TOT-COGNAC",
+        "title": "Cognac Brown",
+        "price": 165.00,
+        "unit_cost": 54.00,
+        "inventory_quantity": 115
+      }
+    ]
+  }
+]
