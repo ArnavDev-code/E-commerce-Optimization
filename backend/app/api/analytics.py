@@ -1,7 +1,7 @@
 """Analytics endpoints for store-level overview and funnel visualizations."""
 
 from datetime import date, timedelta
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
@@ -18,6 +18,7 @@ router = APIRouter(prefix="/analytics", tags=["Analytics"])
 @router.get("/overview", response_model=AnalyticsOverviewResponse)
 def get_analytics_overview(
     days: Annotated[int, Query(ge=7, le=90, description="Reporting period in days")] = 30,
+    data_source: Annotated[Optional[str], Query(description="pixel|ga4|auto")] = None,
     store: ConnectedStore = Depends(get_current_store),
     db: Session = Depends(get_db),
 ) -> AnalyticsOverviewResponse:
@@ -29,12 +30,13 @@ def get_analytics_overview(
     start_date = end_date - timedelta(days=days)
 
     engine = AnalyticsEngine(db, store.id)
-    return engine.compute_overview_kpis(start_date, end_date)
+    return engine.compute_overview_kpis(start_date, end_date, data_source=data_source)
 
 
 @router.get("/funnel", response_model=FunnelAnalyticsResponse)
 def get_funnel_analytics(
     days: Annotated[int, Query(ge=7, le=90, description="Reporting period in days")] = 30,
+    data_source: Annotated[Optional[str], Query(description="pixel|ga4|auto")] = None,
     store: ConnectedStore = Depends(get_current_store),
     db: Session = Depends(get_db),
 ) -> FunnelAnalyticsResponse:
@@ -43,4 +45,4 @@ def get_funnel_analytics(
     start_date = end_date - timedelta(days=days)
 
     engine = AnalyticsEngine(db, store.id)
-    return engine.compute_funnel_breakdown(start_date, end_date)
+    return engine.compute_funnel_breakdown(start_date, end_date, data_source=data_source)

@@ -18,6 +18,7 @@ from sqlalchemy.orm import Session
 from app.models.event import StorefrontEvent
 from app.models.order import Order, OrderItem
 from app.models.product import Product, ProductVariant
+from app.models.analytics import GA4Metric
 from app.schemas.analytics import (
     AnalyticsOverviewResponse,
     FunnelAnalyticsResponse,
@@ -34,9 +35,9 @@ class AnalyticsEngine:
         self.store_id = store_id
 
     def compute_overview_kpis(
-        self, start_date: date, end_date: date
+        self, start_date: date, end_date: date, data_source: Optional[str] = None
     ) -> AnalyticsOverviewResponse:
-        """Compute store-level aggregate KPIs from underlying storefront events and orders."""
+        """Compute store-level aggregate KPIs from underlying storefront events, orders, or GA4 metrics."""
         start_dt = datetime.combine(start_date, datetime.min.time(), tzinfo=timezone.utc)
         end_dt = datetime.combine(end_date, datetime.max.time(), tzinfo=timezone.utc)
 
@@ -72,7 +73,32 @@ class AnalyticsEngine:
             or 0
         )
 
-        # 2. Financial totals from Orders
+        effective_source = "pixel"
+
+        # Check GA4 metrics if requested or if pixel events are absent
+        if data_source == "ga4" or (data_source is None and total_views == 0 and total_sessions == 0):
+            ga4_stmt = (
+                select(
+                    func.sum(GA4Metric.sessions).label("sessions"),
+                    func.sum(GA4Metric.page_views).label("page_views"),
+                    func.sum(GA4Metric.product_views).label("product_views"),
+                    func.sum(GA4Metric.add_to_carts).label("add_to_carts"),
+                )
+                .where(
+                    GA4Metric.store_id == self.store_id,
+                    GA4Metric.dimension_type == "overall",
+                    GA4Metric.report_date >= start_date,
+                    GA4Metric.report_date <= end_date,
+                )
+            )
+            ga4_row = self.db.execute(ga4_stmt).one_or_none()
+            if ga4_row and ga4_row.sessions is not None:
+                total_sessions = int(ga4_row.sessions or 0)
+                total_views = int(ga4_row.product_views or ga4_row.page_views or 0)
+                total_atcs = int(ga4_row.add_to_carts or 0)
+                effective_source = "ga4"
+
+        # 2. Financial totals strictly from Orders (Shopify is authoritative)
         orders_stmt = select(
             func.count(Order.id).label("order_count"),
             func.coalesce(func.sum(Order.total_price), 0).label("total_revenue"),
@@ -155,11 +181,11 @@ class AnalyticsEngine:
             gross_profit=gross_profit,
             gross_profit_per_visitor=gross_profit_per_visitor,
             detected_leaks_count=leaks_count,
-            data_source="pixel",
+            data_source=effective_source,
         )
 
     def compute_funnel_breakdown(
-        self, start_date: date, end_date: date
+        self, start_date: date, end_date: date, data_source: Optional[str] = None
     ) -> FunnelAnalyticsResponse:
         """Compute the full 4-stage funnel (Views -> ATCs -> Checkouts -> Purchases) + segments."""
         start_dt = datetime.combine(start_date, datetime.min.time(), tzinfo=timezone.utc)
@@ -177,6 +203,19 @@ class AnalyticsEngine:
             )
         )
         raw_events = self.db.execute(events_stmt).all()
+
+        # Check if GA4 data should be used
+        if data_source == "ga4" or (not raw_events and data_source is None):
+            ga4_stmt = (
+                select(GA4Metric).where(
+                    GA4Metric.store_id == self.store_id,
+                    GA4Metric.report_date >= start_date,
+                    GA4Metric.report_date <= end_date,
+                )
+            )
+            ga4_records = self.db.execute(ga4_stmt).scalars().all()
+            if ga4_records:
+                return self._compute_ga4_funnel(start_date, end_date, ga4_records)
 
         if not raw_events:
             return FunnelAnalyticsResponse(
@@ -288,6 +327,123 @@ class AnalyticsEngine:
             period_start=start_date,
             period_end=end_date,
             data_source="pixel",
+            stages=stages,
+            device_breakdown=sorted(device_breakdown, key=lambda x: x.views, reverse=True),
+            source_breakdown=sorted(source_breakdown, key=lambda x: x.views, reverse=True),
+        )
+
+    def _compute_ga4_funnel(
+        self, start_date: date, end_date: date, ga4_records: List[GA4Metric]
+    ) -> FunnelAnalyticsResponse:
+        """Calculate funnel progression and segmentations from GA4 metrics."""
+        overall_records = [r for r in ga4_records if r.dimension_type == "overall"]
+
+        v_count = sum(r.product_views or r.page_views or r.sessions for r in overall_records)
+        a_count = sum(r.add_to_carts for r in overall_records)
+        c_count = sum(r.checkouts for r in overall_records)
+        p_count = sum(r.purchases for r in overall_records)
+
+        atc_rate = Decimal(str(round((a_count / v_count * 100), 2))) if v_count > 0 else Decimal("0.00")
+        chk_rate = Decimal(str(round((c_count / a_count * 100), 2))) if a_count > 0 else Decimal("0.00")
+        pur_rate = Decimal(str(round((p_count / c_count * 100), 2))) if c_count > 0 else Decimal("0.00")
+
+        stages = [
+            FunnelStageMetric(
+                stage="Product Views",
+                count=v_count,
+                conversion_rate=Decimal("100.00"),
+                dropoff_rate=Decimal(str(round(100.0 - float(atc_rate), 2))),
+                data_source="ga4",
+            ),
+            FunnelStageMetric(
+                stage="Add to Cart",
+                count=a_count,
+                conversion_rate=atc_rate,
+                dropoff_rate=Decimal(str(round(100.0 - float(chk_rate), 2))),
+                data_source="ga4",
+            ),
+            FunnelStageMetric(
+                stage="Checkout Started",
+                count=c_count,
+                conversion_rate=chk_rate,
+                dropoff_rate=Decimal(str(round(100.0 - float(pur_rate), 2))),
+                data_source="ga4",
+            ),
+            FunnelStageMetric(
+                stage="Purchases Completed",
+                count=p_count,
+                conversion_rate=pur_rate,
+                dropoff_rate=Decimal("0.00"),
+                data_source="ga4",
+            ),
+        ]
+
+        # Device breakdown
+        device_map: Dict[str, Dict[str, Any]] = {}
+        for r in ga4_records:
+            if r.dimension_type == "device" and r.dimension_value:
+                dev = r.dimension_value
+                if dev not in device_map:
+                    device_map[dev] = {"views": 0, "atcs": 0, "purs": 0, "rev": Decimal("0.00")}
+                device_map[dev]["views"] += (r.product_views or r.page_views or r.sessions)
+                device_map[dev]["atcs"] += r.add_to_carts
+                device_map[dev]["purs"] += r.purchases
+                device_map[dev]["rev"] += r.revenue
+
+        device_breakdown: List[SegmentBreakdown] = []
+        for dev, vals in device_map.items():
+            d_views = vals["views"]
+            d_atcs = vals["atcs"]
+            d_purs = vals["purs"]
+            d_atc_rate = Decimal(str(round((d_atcs / d_views * 100), 2))) if d_views > 0 else Decimal("0.00")
+            d_conv = Decimal(str(round((d_purs / d_views * 100), 2))) if d_views > 0 else Decimal("0.00")
+            device_breakdown.append(
+                SegmentBreakdown(
+                    segment_value=dev.capitalize(),
+                    views=d_views,
+                    add_to_carts=d_atcs,
+                    add_to_cart_rate=d_atc_rate,
+                    purchases=d_purs,
+                    conversion_rate=d_conv,
+                    revenue=vals["rev"],
+                )
+            )
+
+        # Source breakdown
+        source_map: Dict[str, Dict[str, Any]] = {}
+        for r in ga4_records:
+            if r.dimension_type == "source" and r.dimension_value:
+                src = r.dimension_value
+                if src not in source_map:
+                    source_map[src] = {"views": 0, "atcs": 0, "purs": 0, "rev": Decimal("0.00")}
+                source_map[src]["views"] += (r.product_views or r.page_views or r.sessions)
+                source_map[src]["atcs"] += r.add_to_carts
+                source_map[src]["purs"] += r.purchases
+                source_map[src]["rev"] += r.revenue
+
+        source_breakdown: List[SegmentBreakdown] = []
+        for src, vals in source_map.items():
+            s_views = vals["views"]
+            s_atcs = vals["atcs"]
+            s_purs = vals["purs"]
+            s_atc_rate = Decimal(str(round((s_atcs / s_views * 100), 2))) if s_views > 0 else Decimal("0.00")
+            s_conv = Decimal(str(round((s_purs / s_views * 100), 2))) if s_views > 0 else Decimal("0.00")
+            source_breakdown.append(
+                SegmentBreakdown(
+                    segment_value=src.replace("_", " ").title(),
+                    views=s_views,
+                    add_to_carts=s_atcs,
+                    add_to_cart_rate=s_atc_rate,
+                    purchases=s_purs,
+                    conversion_rate=s_conv,
+                    revenue=vals["rev"],
+                )
+            )
+
+        return FunnelAnalyticsResponse(
+            period_start=start_date,
+            period_end=end_date,
+            data_source="ga4",
             stages=stages,
             device_breakdown=sorted(device_breakdown, key=lambda x: x.views, reverse=True),
             source_breakdown=sorted(source_breakdown, key=lambda x: x.views, reverse=True),

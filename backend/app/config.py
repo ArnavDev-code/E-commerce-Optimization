@@ -74,6 +74,22 @@ class Settings(BaseModel):
     )
 
     # ── Google Analytics 4 ────────────────────────────────────────────────
+    GOOGLE_CLIENT_ID: str = Field(
+        default_factory=lambda: os.getenv("GOOGLE_CLIENT_ID", "")
+    )
+    GOOGLE_CLIENT_SECRET: str = Field(
+        default_factory=lambda: os.getenv("GOOGLE_CLIENT_SECRET", "")
+    )
+    GOOGLE_REDIRECT_URI: str = Field(
+        default_factory=lambda: os.getenv(
+            "GOOGLE_REDIRECT_URI", "http://localhost:8000/api/integrations/ga4/callback"
+        )
+    )
+    GOOGLE_OAUTH_SCOPES: str = Field(
+        default_factory=lambda: os.getenv(
+            "GOOGLE_OAUTH_SCOPES", "https://www.googleapis.com/auth/analytics.readonly"
+        )
+    )
     GA4_CREDENTIALS_PATH: str = Field(
         default_factory=lambda: os.getenv("GA4_CREDENTIALS_PATH", "")
     )

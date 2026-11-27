@@ -8,6 +8,7 @@ from app.api.products import router as products_router
 from app.api.leaks import router as leaks_router
 from app.api.recommendations import router as recommendations_router
 from app.api.shopify import router as shopify_router
+from app.api.ga4 import router as ga4_router
 
 api_router = APIRouter(prefix="/api")
 
@@ -18,6 +19,7 @@ api_router.include_router(products_router)
 api_router.include_router(leaks_router)
 api_router.include_router(recommendations_router)
 api_router.include_router(shopify_router)
+api_router.include_router(ga4_router)
 
 
 @api_router.get("/health", tags=["System"])

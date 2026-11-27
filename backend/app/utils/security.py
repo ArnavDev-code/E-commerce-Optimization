@@ -192,6 +192,27 @@ def verify_oauth_state(state_token: str, expected_shop: str) -> uuid.UUID:
     return uuid.UUID(sub)
 
 
+def generate_ga4_oauth_state(store_id: uuid.UUID) -> str:
+    """Create a signed, time-limited state nonce for GA4 OAuth CSRF protection."""
+    data = {
+        "store_id": str(store_id),
+        "nonce": secrets.token_hex(16),
+        "purpose": "ga4_oauth",
+    }
+    return create_access_token(data, expires_delta=timedelta(minutes=15))
+
+
+def verify_ga4_oauth_state(state_token: str) -> uuid.UUID:
+    """Verify GA4 OAuth state JWT signature, expiration, and extract store_id."""
+    payload = decode_access_token(state_token)
+    if payload.get("purpose") != "ga4_oauth":
+        raise ValueError("Invalid state token purpose")
+    store_id_str = payload.get("store_id")
+    if not store_id_str:
+        raise ValueError("State token missing store id")
+    return uuid.UUID(store_id_str)
+
+
 def verify_shopify_hmac(query_params: dict[str, str], secret: str) -> bool:
     """Verify Shopify OAuth callback HMAC.
     

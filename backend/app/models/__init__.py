@@ -10,6 +10,7 @@ from app.models.leak import DetectedLeak, AIDiagnosis, Recommendation
 from app.models.experiment import Experiment, ExperimentResult
 from app.models.sync import SyncLog
 from app.models.webhook import WebhookDelivery
+from app.models.connection import DataSourceConnection
 
 __all__ = [
     "Merchant",
@@ -29,4 +30,5 @@ __all__ = [
     "ExperimentResult",
     "SyncLog",
     "WebhookDelivery",
+    "DataSourceConnection",
 ]

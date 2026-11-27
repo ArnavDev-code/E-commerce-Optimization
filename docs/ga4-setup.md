@@ -1,183 +1,126 @@
-# GA4 Integration Setup
+# Google Analytics 4 Integration Guide
 
-This guide walks you through connecting Google Analytics 4 (GA4) to FunnelLeak AI for enhanced funnel analytics. GA4 integration is **optional** — the platform works fully without it using Shopify order data alone.
+## Overview
 
----
+FunnelLeak AI uses the **Google Analytics 4 Data API v1beta** via OAuth 2.0 to ingest session counts, traffic source breakdowns, and device category segmentations.
 
-## What GA4 Adds
-
-With GA4 connected, FunnelLeak AI gains access to:
-
-- **Session-level funnel data** — See where visitors drop off before they even reach a product page
-- **Traffic source attribution** — Identify which channels drive the highest (and lowest) converting traffic
-- **On-site behavior metrics** — Page timing, scroll depth, and engagement signals that correlate with conversion
-- **Enhanced leak detection** — Cross-reference Shopify conversion data with GA4 behavioral data for more precise root-cause analysis
+> **Data separation rule:** GA4 is authoritative for traffic, sessions, and funnel stage counts. Shopify is authoritative for all commerce data (orders, revenue, COGS, inventory). These two sources are **never merged or double-counted**.
 
 ---
 
-## Prerequisites
+## 1. Prerequisites
 
-- A [Google Cloud](https://console.cloud.google.com) account
-- A GA4 property tracking your Shopify store
-- FunnelLeak AI running locally (see [Quick Start](../README.md#quick-start))
-
----
-
-## Step 1: Create a Google Cloud Project
-
-1. Go to the [Google Cloud Console](https://console.cloud.google.com)
-2. Click the project dropdown at the top → **New Project**
-3. Name it (e.g., `funnelleak-ai`) and click **Create**
-4. Select the new project from the dropdown
-
-> **Already have a Google Cloud project?** Skip to Step 2.
+| Requirement | Detail |
+|---|---|
+| Google Account | Must have access to your store's GA4 property |
+| GA4 Property | GA4 (not Universal Analytics) must be active on your Shopify storefront |
+| FunnelLeak Account | Must be a registered merchant with an active Shopify store connected |
 
 ---
 
-## Step 2: Enable the Analytics Data API
+## 2. Create a Google Cloud OAuth 2.0 Client
 
-1. In the Cloud Console, go to **APIs & Services** → **Library**
-2. Search for **Google Analytics Data API**
-3. Click **Enable**
+### Step-by-step
 
-> This is the GA4 Data API (v1), not the older Universal Analytics API.
+1. Open [Google Cloud Console → APIs & Services → Credentials](https://console.cloud.google.com/apis/credentials).
+2. Select or create a project.
+3. Click **Create Credentials → OAuth client ID**.
+4. Set **Application type** to **Web application**.
+5. Add the following **Authorized redirect URIs**:
+   - Development: `http://localhost:8000/api/integrations/ga4/callback`
+   - Production: `https://your-domain.com/api/integrations/ga4/callback`
+6. Click **Create** and note your **Client ID** and **Client Secret**.
 
----
+### Enable Required APIs
 
-## Step 3: Create a Service Account
-
-1. Go to **APIs & Services** → **Credentials**
-2. Click **Create Credentials** → **Service Account**
-3. Enter a name: `funnelleak-ga4-reader`
-4. Click **Create and Continue**
-5. For the role, select **No role** (access is granted at the GA4 property level, not the GCP project level)
-6. Click **Done**
-
----
-
-## Step 4: Download the JSON Key File
-
-1. In the **Credentials** page, find your new service account
-2. Click the service account email to open its details
-3. Go to the **Keys** tab
-4. Click **Add Key** → **Create new key**
-5. Select **JSON** format
-6. Click **Create** — the key file downloads automatically
-
-> ⚠️ **Store this file securely.** Never commit it to version control. Place it outside your project directory or in a path listed in `.gitignore`.
-
-Recommended location:
-
-```
-~/.config/funnelleak/ga4-credentials.json
-```
+In the same project, navigate to **APIs & Services → Library** and enable:
+- **Google Analytics Admin API** — for property discovery
+- **Google Analytics Data API** — for `runReport` metric queries
 
 ---
 
-## Step 5: Grant Access to Your GA4 Property
-
-1. Go to [Google Analytics](https://analytics.google.com)
-2. Navigate to **Admin** (gear icon, bottom left)
-3. Under your GA4 property, click **Property Access Management**
-4. Click the **+** button → **Add users**
-5. Enter the service account email (e.g., `funnelleak-ga4-reader@your-project.iam.gserviceaccount.com`)
-6. Set the role to **Viewer** (read-only access is sufficient)
-7. Click **Add**
-
----
-
-## Step 6: Find Your GA4 Property ID
-
-1. In Google Analytics, go to **Admin**
-2. Under **Property Settings**, find the **Property ID**
-3. It's a numeric value (e.g., `123456789`) — not the measurement ID (`G-XXXXXXX`)
-
----
-
-## Step 7: Set Environment Variables
+## 3. Configure Environment Variables
 
 Add the following to your `.env` file:
 
-```env
-GA4_CREDENTIALS_PATH=/absolute/path/to/ga4-credentials.json
-GA4_PROPERTY_ID=123456789
+```dotenv
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/api/integrations/ga4/callback
+GOOGLE_OAUTH_SCOPES=https://www.googleapis.com/auth/analytics.readonly
 ```
 
-Replace with your actual file path and property ID.
+The scope `analytics.readonly` grants read-only access to GA4 reporting data. No write permissions are requested or used.
 
 ---
 
-## Step 8: Verify the Connection
+## 4. Connect GA4 from the FunnelLeak UI
 
-1. Restart FunnelLeak AI:
-   ```bash
-   docker compose restart backend
-   ```
-
-2. Test the GA4 connection:
-   ```bash
-   curl http://localhost:8000/api/v1/analytics/ga4/status
-   ```
-   You should see `"status": "connected"` with your property name.
+1. Log in to FunnelLeak AI and navigate to **Integrations**.
+2. In the **Google Analytics 4** card, click **Connect Google Account**.
+3. You are redirected to Google's OAuth consent screen. Grant access.
+4. After granting access, you are redirected back to FunnelLeak with the connection active.
+5. Click **Select Property** and expand your Google Analytics account.
+6. Choose the GA4 property that tracks your Shopify storefront.
+7. Click **Use This Property**.
+8. Click **Sync Now** to import the last 30 days of GA4 data.
 
 ---
 
-## Available Metrics and Dimensions
+## 5. What Data is Imported
 
-FunnelLeak AI queries the following GA4 data:
+Each sync run calls `properties/{id}:runReport` and imports the following:
 
-### Metrics
+| Dimension | Metrics Collected |
+|---|---|
+| `overall` (daily totals) | sessions, totalUsers, screenPageViews, itemsViewed, itemsAddedToCart, itemsCheckedOut, ecommercePurchases, purchaseRevenue |
+| `deviceCategory` (mobile/desktop/tablet) | sessions, totalUsers, screenPageViews |
+| `sessionDefaultChannelGroup` (Organic/Paid/etc.) | sessions, totalUsers, screenPageViews |
 
-| Metric                     | Description                                      |
-| -------------------------- | ------------------------------------------------ |
-| `sessions`                 | Total sessions in the reporting period            |
-| `totalUsers`               | Unique users                                     |
-| `screenPageViews`          | Total page views                                 |
-| `averageSessionDuration`   | Average time spent per session (seconds)         |
-| `bounceRate`               | Percentage of single-page sessions               |
-| `ecommerce:transactions`   | Completed purchases tracked via GA4 ecommerce    |
-| `ecommerce:purchaseRevenue`| Total revenue from GA4-tracked purchases         |
-| `conversions`              | Goal/event completions                           |
-
-### Dimensions
-
-| Dimension                 | Description                                       |
-| ------------------------- | ------------------------------------------------- |
-| `date`                    | Date of the session                               |
-| `sessionSource`           | Traffic source (e.g., google, facebook, direct)   |
-| `sessionMedium`           | Traffic medium (e.g., organic, cpc, referral)     |
-| `sessionCampaignName`     | Campaign name (for paid traffic)                  |
-| `pagePath`                | URL path of the page viewed                       |
-| `deviceCategory`          | Device type (desktop, mobile, tablet)             |
-| `country`                 | Visitor's country                                 |
-| `city`                    | Visitor's city                                    |
+> **Important:** If ecommerce events are not configured in your GA4 property, funnel step counts (itemsViewed, itemsAddedToCart, etc.) will be zero. FunnelLeak will fall back to basic session metrics in that case.
 
 ---
 
-## Troubleshooting
+## 6. Analytics Engine Source Attribution
 
-### "Permission denied" or "403" error
-- Verify the service account email has **Viewer** access on the GA4 property (not just the GCP project)
-- Changes to GA4 access can take up to 10 minutes to propagate
+When GA4 is connected and a property is selected:
 
-### "API not enabled" error
-- Confirm you enabled the **Google Analytics Data API** (not the Admin API or Reporting API)
-- Ensure it's enabled in the same GCP project as your service account
+| Data Type | Source |
+|---|---|
+| Sessions, traffic sources, device breakdown | **GA4** (via `GA4Metric` table) |
+| Orders, revenue, AOV | **Shopify** (via `Order` table) — always authoritative |
+| Product views and add-to-cart events | **Shopify Web Pixel** when available, else **GA4** |
+| COGS and gross margin | **Manual entry** or Shopify cost data |
 
-### "Property not found" error
-- Use the numeric **Property ID** (e.g., `123456789`), not the Measurement ID (`G-XXXXXXX`)
-- Confirm the service account has access to this specific property
-
-### Empty data
-- GA4 data is typically available with a 24–48 hour delay
-- Ensure your GA4 property is actively collecting data from your Shopify store
-- Verify Enhanced Ecommerce tracking is configured in GA4
+You can explicitly request a data source on analytics endpoints with `?data_source=ga4` or `?data_source=pixel`.
 
 ---
 
-## Security Notes
+## 7. Token Refresh and Expiry
 
-- The service account JSON key is read from disk at startup and never stored in the database
-- FunnelLeak AI uses **read-only** access to GA4 (Viewer role)
-- API calls are authenticated via Google's OAuth 2.0 service account flow over HTTPS
-- The credentials file path should be outside the project directory and listed in `.gitignore`
+- Access tokens expire after 1 hour.
+- FunnelLeak automatically refreshes the access token using the stored refresh token before API calls.
+- If the refresh token becomes invalid (user revokes access or long inactivity), the connection status changes to `expired`. Reconnect from the Integrations page.
+
+---
+
+## 8. Disconnecting
+
+Clicking **Disconnect** in the Integrations page:
+1. Calls `POST /api/integrations/ga4/disconnect`
+2. Revokes the access token at `https://oauth2.googleapis.com/revoke`
+3. Clears all stored encrypted credentials from the database
+4. Preserves previously imported `GA4Metric` records (historical data)
+
+To also delete historical GA4 data, contact your FunnelLeak administrator.
+
+---
+
+## 9. Privacy & Security
+
+| Aspect | Detail |
+|---|---|
+| Scope | `analytics.readonly` — no write access |
+| Token storage | Encrypted at rest using AES-256 (Fernet) keyed on `ENCRYPTION_KEY` |
+| Data isolation | All credentials and metrics are scoped to the authenticated merchant's store |
+| Token transmission | Tokens are never logged, returned in API responses, or included in error messages |

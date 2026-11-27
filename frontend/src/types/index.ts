@@ -214,3 +214,39 @@ export interface AnalyticsOverview {
   pending_recommendations_count: number;
   active_experiments_count: number;
 }
+
+export interface GA4PropertySummary {
+  property_id: string;
+  display_name: string;
+  account_id?: string | null;
+  account_name?: string | null;
+}
+
+export interface GA4AccountSummary {
+  account_id: string;
+  display_name: string;
+  properties: GA4PropertySummary[];
+}
+
+export interface GA4PropertiesResponse {
+  accounts: GA4AccountSummary[];
+  total_properties: number;
+}
+
+export interface GA4ConnectionStatus {
+  is_connected: boolean;
+  connection_status: 'connected' | 'disconnected' | 'error' | 'expired' | string;
+  provider_property_id?: string | null;
+  provider_property_name?: string | null;
+  last_validated_at?: string | null;
+  last_sync_at?: string | null;
+  last_sync_error?: string | null;
+  token_expired: boolean;
+}
+
+export interface GA4SyncResponse {
+  success: boolean;
+  records_synced: number;
+  message: string;
+  error?: string | null;
+}

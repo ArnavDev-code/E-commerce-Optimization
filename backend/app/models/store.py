@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from app.models.leak import DetectedLeak, Recommendation
     from app.models.experiment import Experiment
     from app.models.sync import SyncLog
+    from app.models.connection import DataSourceConnection
 
 
 class ConnectedStore(Base):
@@ -85,4 +86,7 @@ class ConnectedStore(Base):
     )
     sync_logs: Mapped[List[SyncLog]] = relationship(
         "SyncLog", back_populates="store", cascade="all, delete-orphan"
+    )
+    data_source_connections: Mapped[List[DataSourceConnection]] = relationship(
+        "DataSourceConnection", back_populates="store", cascade="all, delete-orphan"
     )
